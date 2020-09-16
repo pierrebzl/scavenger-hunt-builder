@@ -32,3 +32,11 @@ This app is meant to ease the process of creating homemade scavenger hunts.
             - The id/location of where this `clue ticket` should be hidden during the game setup
 
     - A table / story sum up of each team hunt (spot order, etc.) 
+
+
+## Dev 
+`curl -H "Content-Type: application/json" -X POST -d '{"name":"test"}' http://localhost:8080/room/ | jq`
+
+`curl -H "Content-Type: application/json" -X GET http://localhost:8080/room/2 | jq`
+
+`curl -H "Content-Type: application/json" -X PUT -d '{"name":"test-new"}' http://localhost:8080/room/2`
