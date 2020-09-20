@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"github.com/gorilla/mux"
@@ -11,49 +9,31 @@ import (
 	"github.com/pierrebzl/scavenger-hunt/pkg/utils"
 )
 
-var NewSpot models.Spot
-
 func GetSpots(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	RoomId := vars["roomId"]
-	ID, err:= strconv.ParseInt(RoomId, 0, 0)
-	if err != nil {
-		fmt.Println("Error while parsing")
-	}
-	// To-DO Handle if room does not exist
+	ID, _ := strconv.ParseInt(RoomId, 0, 0)
+	// TO-DO Handle if room does not exist
 	Spots := models.GetAllSpotsByRoomId(ID)
-	res, _ := json.Marshal(Spots)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(res)
+	utils.Respond(w, http.StatusOK, Spots)
 }
 
 func GetSpot(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	SpotId := vars["spotId"]
-	ID, err:= strconv.ParseInt(SpotId, 0, 0)
-	if err != nil {
-		fmt.Println("Error while parsing")
-	}
-	RoomDetails, _:= models.GetSpotById(ID)
-	res, _ := json.Marshal(RoomDetails)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(res)
+	ID, _ := strconv.ParseInt(SpotId, 0, 0)
+	Spot, _:= models.GetSpotById(ID)
+	utils.Respond(w, http.StatusOK, Spot)
 }
 
 func CreateSpot(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	RoomId, err:= strconv.ParseUint(vars["roomId"], 0, 0)
-	if err != nil {
-		fmt.Println("Error while parsing")
-	}
+	RoomId, _ := strconv.ParseUint(vars["roomId"], 0, 0)
+	// TO-DO - Err if room does not exist
 	CreateSpot := &models.Spot{RoomRefer: RoomId}
 	utils.ParseBody(r, CreateSpot)
-	b:= CreateSpot.CreateSpot()
-	res,_ := json.Marshal(b)
-	w.WriteHeader(http.StatusOK)
-	w.Write(res)
+	NewSpot := CreateSpot.CreateSpot()
+	utils.Respond(w, http.StatusOK, NewSpot)
 }
 
 func UpdateSpot(w http.ResponseWriter, r *http.Request) {
@@ -62,10 +42,7 @@ func UpdateSpot(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	// TO-DO handle when spot id does not reexist
 	SpotId := vars["spotId"]
-	ID, err:= strconv.ParseInt(SpotId, 0, 0)
-	if err != nil {
-		fmt.Println("Error while parsing")
-	}
+	ID, _ := strconv.ParseInt(SpotId, 0, 0)
 	Spot, db:= models.GetSpotById(ID)
 	if updateSpot.Name != "" {
 		Spot.Name = updateSpot.Name
@@ -74,23 +51,13 @@ func UpdateSpot(w http.ResponseWriter, r *http.Request) {
 		Spot.Clue = updateSpot.Clue
 	}
 	db.Save(&Spot)
-	res, _ := json.Marshal(Spot)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(res)
+	utils.Respond(w, http.StatusOK, Spot)
 }
-
 
 func DeleteSpot(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	SpotId := vars["spotId"]
-	ID, err:= strconv.ParseInt(SpotId, 0, 0)
-	if err != nil {
-		fmt.Println("Error while parsing")
-	}
+	ID, _ := strconv.ParseInt(SpotId, 0, 0)
 	Spot:= models.DeleteSpot(ID)
-	res, _ := json.Marshal(Spot)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(res)
+	utils.Respond(w, http.StatusOK, Spot)
 }

@@ -31,9 +31,9 @@ func GetAllRooms() []Room {
 }
 
 func GetRoomById(Id int64) (*Room , *gorm.DB){
-	var getRoom Room
-	db:=db.Where("Id = ?", Id).Find(&getRoom)
-	return &getRoom, db
+	var Room Room
+	db:=db.Where("Id = ?", Id).Find(&Room)
+	return &Room, db
 }
 
 func DeleteRoom(Id int64) Room {

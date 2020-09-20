@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"github.com/gorilla/mux"
@@ -11,37 +9,26 @@ import (
 	"github.com/pierrebzl/scavenger-hunt/pkg/utils"
 )
 
-var NewRoom models.Room
-
 func CreateRoom(w http.ResponseWriter, r *http.Request) {
 	CreateRoom := &models.Room{}
 	utils.ParseBody(r, CreateRoom)
-	b:= CreateRoom.CreateRoom()
-	res,_ := json.Marshal(b)
-	w.WriteHeader(http.StatusOK)
-	w.Write(res)
+	// TO-DO - Error handling
+	Room := CreateRoom.CreateRoom()
+	utils.Respond(w, http.StatusOK, Room)
 }
 
 func GetRoom(w http.ResponseWriter, r *http.Request) {
-	newRooms:= models.GetAllRooms()
-	res, _ := json.Marshal(newRooms)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(res)
+	Rooms := models.GetAllRooms()
+	utils.Respond(w, http.StatusOK, Rooms)
 }
 
 func GetRoomById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	RoomId := vars["roomId"]
-	ID, err:= strconv.ParseInt(RoomId, 0, 0)
-	if err != nil {
-		fmt.Println("Error while parsing")
-	}
-	RoomDetails, _:= models.GetRoomById(ID)
-	res, _ := json.Marshal(RoomDetails)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(res)
+	ID, _ := strconv.ParseInt(RoomId, 0, 0)
+	Room, _ := models.GetRoomById(ID)
+	// TO-DO - Error handling
+	utils.Respond(w, http.StatusOK, Room)
 }
 
 func UpdateRoom(w http.ResponseWriter, r *http.Request) {
@@ -49,33 +36,22 @@ func UpdateRoom(w http.ResponseWriter, r *http.Request) {
 	utils.ParseBody(r, updateRoom)
 	vars := mux.Vars(r)
 	RoomId := vars["roomId"]
-	ID, err:= strconv.ParseInt(RoomId, 0, 0)
-	if err != nil {
-		fmt.Println("Error while parsing")
-	}
-	RoomDetails, db:= models.GetRoomById(ID)
+	ID, _ := strconv.ParseInt(RoomId, 0, 0)
+	RoomDetails, db := models.GetRoomById(ID)
 	if updateRoom.Name != "" {
 		RoomDetails.Name = updateRoom.Name
 	}
+	// TO-DO - Add fields to update
 	db.Save(&RoomDetails)
-	res, _ := json.Marshal(RoomDetails)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(res)
+	utils.Respond(w, http.StatusOK, RoomDetails)
 }
 
 func DeleteRoom(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	RoomId := vars["roomId"]
-	ID, err:= strconv.ParseInt(RoomId, 0, 0)
-	if err != nil {
-		fmt.Println("Error while parsing")
-	}
-	// TO-Do: check if spots exists
+	ID, _ := strconv.ParseInt(RoomId, 0, 0)
+	// TO-DO: check if spots exists
 	models.DeleteAllSpotByRoomId(ID)
 	Room:= models.DeleteRoom(ID)
-	res, _ := json.Marshal(Room)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(res)
+	utils.Respond(w, http.StatusOK, Room)
 }
