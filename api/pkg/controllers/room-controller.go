@@ -32,7 +32,7 @@ func GetRoom(w http.ResponseWriter, r *http.Request) {
 
 func GetRoomById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	RoomId := vars["id"]
+	RoomId := vars["roomId"]
 	ID, err:= strconv.ParseInt(RoomId, 0, 0)
 	if err != nil {
 		fmt.Println("Error while parsing")
@@ -48,7 +48,7 @@ func UpdateRoom(w http.ResponseWriter, r *http.Request) {
 	var updateRoom = &models.Room{}
 	utils.ParseBody(r, updateRoom)
 	vars := mux.Vars(r)
-	RoomId := vars["id"]
+	RoomId := vars["roomId"]
 	ID, err:= strconv.ParseInt(RoomId, 0, 0)
 	if err != nil {
 		fmt.Println("Error while parsing")
@@ -66,11 +66,13 @@ func UpdateRoom(w http.ResponseWriter, r *http.Request) {
 
 func DeleteRoom(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	RoomId := vars["id"]
+	RoomId := vars["roomId"]
 	ID, err:= strconv.ParseInt(RoomId, 0, 0)
 	if err != nil {
 		fmt.Println("Error while parsing")
 	}
+	// TO-Do: check if spots exists
+	models.DeleteAllSpotByRoomId(ID)
 	Room:= models.DeleteRoom(ID)
 	res, _ := json.Marshal(Room)
 	w.Header().Set("Content-Type", "application/json")

@@ -10,6 +10,7 @@ var db *gorm.DB
 type Room struct {
 	gorm.Model
 	Name        string `json:"name"`
+	Spots 		[]Spot `gorm:"foreignKey:RoomRefer"`
 }
 
 func init() {
@@ -18,12 +19,12 @@ func init() {
 	db.AutoMigrate(&Room{})
 }
 
-func (b *Room) CreateRoom() *Room {
-	db.Create(&b)
-	return b
+func (r *Room) CreateRoom() *Room {
+	db.Create(&r)
+	return r
 }
 
-func  GetAllRooms() []Room {
+func GetAllRooms() []Room {
 	var Rooms []Room
 	db.Find(&Rooms)
 	return Rooms
