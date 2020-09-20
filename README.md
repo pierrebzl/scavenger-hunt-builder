@@ -3,7 +3,7 @@
 This app is meant to ease the process of creating homemade scavenger hunts.
 
 ## Basic workflow:
-- Set game environment parameters: 
+- Set game environment parameters:
     - Players:
         - Number and names of the participants
         - Number, names and color/logo of the teams
@@ -13,7 +13,7 @@ This app is meant to ease the process of creating homemade scavenger hunts.
 - Add clues to find spots in each of the rooms/places
     - `room A`
         - `spot 1`
-            - `clue 1` 
+            - `clue 1`
                 - Short name
                 - The clue (could be text, rebus, picture) the player will need to find `spot 1` in `room A`
                 - Picture of `spot 1` (optional)
@@ -31,12 +31,16 @@ This app is meant to ease the process of creating homemade scavenger hunts.
             - The clue to get the team on the path of the next spot
             - The id/location of where this `clue ticket` should be hidden during the game setup
 
-    - A table / story sum up of each team hunt (spot order, etc.) 
+    - A table / story sum up of each team hunt (spot order, etc.)
 
 
-## Dev 
-`curl -H "Content-Type: application/json" -X POST -d '{"name":"test"}' http://localhost:8080/room/ | jq`
+## Dev
+`curl -H "Content-Type: application/json" -X POST -d '{"name":"room 1"}' http://localhost:8080/room/ | jq`
 
 `curl -H "Content-Type: application/json" -X GET http://localhost:8080/room/2 | jq`
 
-`curl -H "Content-Type: application/json" -X PUT -d '{"name":"test-new"}' http://localhost:8080/room/2`
+`curl -H "Content-Type: application/json" -X PUT -d '{"name":"new room name"}' http://localhost:8080/room/2`
+
+`curl -H "Content-Type: application/json" -X POST -d '{"name":"clue 1", "clue":"indice 1"}' http://localhost:8080/room/2/spot/ | jq`
+
+`curl -H "Content-Type: application/json" -X PUT -d '{"name":"test-new-clue", "clue": "changed"}' http://localhost:8080/spot/18`
