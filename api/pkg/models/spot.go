@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/pierrebzl/scavenger-hunt/pkg/config"
 	"gorm.io/gorm"
 )
 
@@ -10,14 +9,6 @@ type Spot struct {
 	Name 		string `json:"name"`
 	Clue		string `json:"clue"`
 	RoomRefer	uint64
-}
-
-func init() {
-	config.Connect()
-	db = config.GetDB()
-	db.AutoMigrate(&Spot{})
-	var spots []Spot
-	db.Model(&spots).Association("Spots")
 }
 
 func (b *Spot) CreateSpot() *Spot {
