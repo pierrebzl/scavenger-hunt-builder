@@ -11,4 +11,10 @@ Room C,Spot 1,H9,8
 Room C,Spot 2,H10,1
 Room C,Spot 3,H11,6
 Room C,Spot 4,H12,6
+Room D,Spot 1,H10,1
+Room D,Spot 2,H11,6
+Room D,Spot 4,H12,2
+Room D,Spot 4,H12,6
+Room G,Spot 6,H20,10
+Room G,Spot 6,H20,1
 ~ Finish,Spot 9,HXX,0
